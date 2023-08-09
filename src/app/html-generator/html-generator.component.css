@@ -1,0 +1,14 @@
+.form-container {
+    margin-bottom: 20px;
+  }
+  
+  .preview-container {
+    border: 1px solid #ccc;
+    padding: 10px;
+  }
+  
+  .review-preview {
+    padding: 10px;
+    border: 1px solid #ccc;
+    margin-top: 10px;
+  }

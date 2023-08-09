@@ -1,0 +1,8 @@
+{
+    "/v2": {
+        "target": "https://api.insocial.nl",
+        "secure": false,
+        "changeOrigin": true,
+        "logLevel": "debug"
+    } 
+}

@@ -1,0 +1,19 @@
+<h2>HTML Feedback Generator</h2>
+
+<div class="form-container">
+  <label for="reviewSelect">Select Review:</label>
+  <select id="reviewSelect" [(ngModel)]="selectedReview" (ngModelChange)="generatePreview()">
+    <option *ngFor="let review of reviews" [value]="review.label">{{ review.label }}</option>
+  </select>
+
+  <label for="textColor">Text Color:</label>
+  <input type="color" id="textColor" [(ngModel)]="textColor" (ngModelChange)="generatePreview()">
+
+  <label for="bgColor">Background Color:</label>
+  <input type="color" id="bgColor" [(ngModel)]="bgColor" (ngModelChange)="generatePreview()">
+</div>
+
+<div class="preview-container">
+  <h3>Preview:</h3>
+  <app-generated-block [textColor]="textColor" [bgColor]="bgColor" [surveyContent]="surveyContent"></app-generated-block>
+</div>
