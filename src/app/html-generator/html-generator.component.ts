@@ -23,7 +23,17 @@ export class HtmlGeneratorComponent implements OnInit{
     });
   }
 
-  // TODO: fix init missing content issue
+  handleTextColorChange(): void {
+    this.updateColorInput('textColor');
+    this.generatePreview();
+  }
+
+  private updateColorInput(colorVariable: string): void {
+    const colorInput = document.getElementById(colorVariable) as HTMLInputElement;
+    if (colorInput) {
+      colorInput.value = this.textColor;
+    }
+  }
 
   generatePreview(): void {
     if (this.selectedReview && (this.textColor || this.bgColor)) {
@@ -32,7 +42,7 @@ export class HtmlGeneratorComponent implements OnInit{
         this.surveyContent = data.data;
       })
     } else {
-      this.previewHtml = ''; // Если данные не валидны, очищаем превью
+      this.previewHtml = '';
     }
   }
 }

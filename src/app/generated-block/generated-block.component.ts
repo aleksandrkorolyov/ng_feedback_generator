@@ -10,4 +10,16 @@ export class GeneratedBlockComponent {
   @Input() bgColor: string = '#ffffff';
   @Input() surveyContent: any[] = [];
 
+  getScoreBackgroundColor(score: number): string {
+    if (score >= 0 && score <= 3) {
+      return '#ff0000';
+    } else if (score >= 4 && score <= 6) {
+      return '#ff9214';
+    } else if (score >= 7 && score <= 10) {
+      return '#69d100';
+    } else {
+      return 'transparent';
+    }
+  }
+
 }

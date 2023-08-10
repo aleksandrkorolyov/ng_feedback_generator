@@ -12,3 +12,12 @@
     border: 1px solid #ccc;
     margin-top: 10px;
   }
+
+  .color-sample {
+    width: 24px;
+    height: 24px;
+    border: 1px solid #ccc;
+    display: inline-block;
+    margin-left: 10px;
+    vertical-align: middle;
+  }

@@ -12,14 +12,10 @@ export class ApiService {
 
   private surveyUrl = `/v2/customers/${this.customerId}/surveys`;
 
-  // private responsesUrl = `https://api.insocial.nl/v2/customers/${this.customerId}/surveys/{surveyId}/responses`;
-
   constructor(private http: HttpClient) { }
 
   // TODO:
   // - replace creds to .env
-  // - correct getSurveys method 
-  // - correct method for getting responces - add  X-AUTH-TOKEN to requests
 
   getSurveys(): Observable<any> {
     const headers = new HttpHeaders().set('X-AUTH-TOKEN', this.apiToken)
@@ -31,5 +27,4 @@ export class ApiService {
     const headers = new HttpHeaders().set('X-AUTH-TOKEN', this.apiToken)
     return this.http.get(responceUrl, {headers})
   }
-
 }
