@@ -26,13 +26,6 @@ export class HtmlGeneratorComponent implements OnInit {
     this.apiService.getSurveys().subscribe(data => {
       this.reviews = data.data;
     });
-    this.store.select(selectTextColor).subscribe(textColor => {
-      this.textColor = textColor;
-    });
-  
-    this.store.select(selectBgColor).subscribe(bgColor => {
-      this.bgColor = bgColor;
-    });
   }
 
   updateSurveyContent(): void {
