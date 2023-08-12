@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ApiService {
+  
   private customerId = 'e92679f6-9cc3-11ed-a536-068a4dd4d266';
 
   private apiToken = '4c691e04d654055e6263293275228870c7567c471d93';
@@ -13,9 +14,6 @@ export class ApiService {
   private surveyUrl = `/v2/customers/${this.customerId}/surveys`;
 
   constructor(private http: HttpClient) { }
-
-  // TODO:
-  // - replace creds to .env
 
   getSurveys(): Observable<any> {
     const headers = new HttpHeaders().set('X-AUTH-TOKEN', this.apiToken)

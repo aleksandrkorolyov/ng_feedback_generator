@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { updateTextColor, updateBgColor } from '../settings.actions';
+import { selectTextColor, selectBgColor } from '../settings.selectors';
 import { ApiService } from '../api.service';
 
 @Component({
@@ -6,43 +9,44 @@ import { ApiService } from '../api.service';
   templateUrl: './html-generator.component.html',
   styleUrls: ['./html-generator.component.css']
 })
-export class HtmlGeneratorComponent implements OnInit{
+export class HtmlGeneratorComponent implements OnInit {
 
   reviews: any[] = [];
   selectedReview: string = '';
   surveyContent: any[] = [];
   textColor: string = '#000000';
-  bgColor: string = '#ffffff';
-  previewHtml: string = '';
+  bgColor: any = '#ffffff';
 
-  constructor(private apiService: ApiService) { }
+  constructor(
+    private apiService: ApiService,
+    private store: Store
+  ) { }
 
   ngOnInit(): void {
     this.apiService.getSurveys().subscribe(data => {
       this.reviews = data.data;
     });
+    this.store.select(selectTextColor).subscribe(textColor => {
+      this.textColor = textColor;
+    });
+  
+    this.store.select(selectBgColor).subscribe(bgColor => {
+      this.bgColor = bgColor;
+    });
   }
 
-  handleTextColorChange(): void {
-    this.updateColorInput('textColor');
-    this.generatePreview();
+  updateSurveyContent(): void {
+    const selectedSurveyId = this.reviews.find(review => review.label === this.selectedReview)?.id;
+    this.apiService.getSurveyContent(selectedSurveyId).subscribe(data => {
+      this.surveyContent = data.data;
+    })
   }
 
-  private updateColorInput(colorVariable: string): void {
-    const colorInput = document.getElementById(colorVariable) as HTMLInputElement;
-    if (colorInput) {
-      colorInput.value = this.textColor;
-    }
+  updateTextColorState(): void {
+    this.store.dispatch(updateTextColor({ textColor: this.textColor }));
   }
 
-  generatePreview(): void {
-    if (this.selectedReview && (this.textColor || this.bgColor)) {
-      const selectedSurveyId = this.reviews.find(review => review.label === this.selectedReview)?.id;
-      this.apiService.getSurveyContent(selectedSurveyId).subscribe(data => {
-        this.surveyContent = data.data;
-      })
-    } else {
-      this.previewHtml = '';
-    }
+  updateBgColorState(): void {
+    this.store.dispatch(updateBgColor({ bgColor: this.bgColor }));
   }
 }

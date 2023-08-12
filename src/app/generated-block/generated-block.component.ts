@@ -1,4 +1,6 @@
 import { Component, Input } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { selectTextColor, selectBgColor } from '../settings.selectors';
 
 @Component({
   selector: 'app-generated-block',
@@ -6,9 +8,22 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./generated-block.component.css']
 })
 export class GeneratedBlockComponent {
-  @Input() textColor: string = '#000000';
-  @Input() bgColor: string = '#ffffff';
   @Input() surveyContent: any[] = [];
+
+  textColor: string = '';
+  bgColor: string = '';
+
+  constructor(private store: Store) {}
+
+  ngOnInit(): void {
+    this.store.select(selectTextColor).subscribe(textColor => {
+      this.textColor = textColor;
+    });
+
+    this.store.select(selectBgColor).subscribe(bgColor => {
+      this.bgColor = bgColor;
+    });
+  }
 
   getScoreBackgroundColor(score: number): string {
     if (score >= 0 && score <= 3) {
