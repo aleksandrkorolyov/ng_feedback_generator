@@ -1,15 +1,17 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { updateTextColor, updateBgColor } from '../settings.actions';
-import { selectTextColor, selectBgColor } from '../settings.selectors';
 import { ApiService } from '../api.service';
+import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'app-html-generator',
   templateUrl: './html-generator.component.html',
   styleUrls: ['./html-generator.component.css']
 })
-export class HtmlGeneratorComponent implements OnInit {
+export class HtmlGeneratorComponent implements OnInit, OnDestroy {
+
+  private _destroy$ = new Subject();
 
   reviews: any[] = [];
   selectedReview: string = '';
@@ -23,14 +25,23 @@ export class HtmlGeneratorComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.apiService.getSurveys().subscribe(data => {
+    this.apiService.getSurveys()
+    .pipe(takeUntil(this._destroy$))
+    .subscribe(data => {
       this.reviews = data.data;
     });
   }
 
+  ngOnDestroy(): void {
+    this._destroy$.next(null);
+    this._destroy$.complete();
+  }
+
   updateSurveyContent(): void {
     const selectedSurveyId = this.reviews.find(review => review.label === this.selectedReview)?.id;
-    this.apiService.getSurveyContent(selectedSurveyId).subscribe(data => {
+    this.apiService.getSurveyContent(selectedSurveyId)
+    .pipe(takeUntil(this._destroy$))
+    .subscribe(data => { 
       this.surveyContent = data.data;
     })
   }

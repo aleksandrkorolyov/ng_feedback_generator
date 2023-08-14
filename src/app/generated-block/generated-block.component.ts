@@ -1,5 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { selectTextColor, selectBgColor } from '../settings.selectors';
 
 @Component({
@@ -7,7 +9,10 @@ import { selectTextColor, selectBgColor } from '../settings.selectors';
   templateUrl: './generated-block.component.html',
   styleUrls: ['./generated-block.component.css']
 })
-export class GeneratedBlockComponent {
+export class GeneratedBlockComponent implements OnInit, OnDestroy{
+
+  private _destroy$ = new Subject();
+
   @Input() surveyContent: any[] = [];
 
   textColor: string = '';
@@ -15,12 +20,21 @@ export class GeneratedBlockComponent {
 
   constructor(private store: Store) {}
 
+  ngOnDestroy(): void {
+    this._destroy$.next(null);
+    this._destroy$.complete();
+  }
+
   ngOnInit(): void {
-    this.store.select(selectTextColor).subscribe(textColor => {
+    this.store.select(selectTextColor)
+    .pipe(takeUntil(this._destroy$))
+    .subscribe(textColor => {
       this.textColor = textColor;
     });
 
-    this.store.select(selectBgColor).subscribe(bgColor => {
+    this.store.select(selectBgColor)
+    .pipe(takeUntil(this._destroy$))
+    .subscribe(bgColor => {
       this.bgColor = bgColor;
     });
   }
